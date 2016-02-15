@@ -1,0 +1,73 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>Undo</title>    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <meta name="author" content="John Cho">    
+  </head>
+  <body ng-app="ctmApp">
+
+  	<div ng-controller="MainCtrl">
+
+  		<div>
+  			<label>desktop ({{undoSvc.desktop.length}}) :</label>
+	  		<ul ng-repeat="item in undoSvc.desktop">
+	  			<li><input ng-model="item.name" ng-change="updatePolygon(item,'name','{{item.name}}')" /> <button ng-click="removePolygon(item);">X</button></li>
+	  		</ul>
+  		</div>
+
+  		<div>
+  			<label>undoBin ({{undoSvc.undoBin.length}}): </label>
+	  		<ul ng-repeat="item in undoSvc.undoBin">
+	  			<li>{{item}}</li>
+	  		</ul>
+  		</div>  		
+  		<div>
+  			<label>redoBin ({{undoSvc.redoBin.length}}): </label>
+	  		<ul ng-repeat="item in undoSvc.redoBin">
+	  			<li>{{item}}</li>
+	  		</ul>
+  		</div>  		  		
+  		
+  		<button ng-click="createPolygon()">Poly Creation</button>  		
+		<button ng-disabled="undoSvc.undoBin.length <= 0" ng-click="undoSvc.undo()">UNDO</button>
+		<button ng-disabled="undoSvc.redoBin.length <= 0" ng-click="undoSvc.redo()">REDO</button>
+	</div>
+
+    <script src="angular.min.js"></script>
+	
+	<script>
+
+	angular.module('ctmApp',[])
+	.controller('MainCtrl', function($scope, $log, PolygonService, UndoService) {
+		$scope.undoSvc = UndoService;		
+		$scope.polySvc = PolygonService;
+
+		$scope.createPolygon = function(){
+			var obj = PolygonService.addPolygon();
+			UndoService.addEvent(obj,'create');			
+		};			
+		$scope.updatePolygon = function(polygon, propertyName, ov){
+			UndoService.addEvent(polygon,'update',propertyName, ov);
+		};
+
+		$scope.removePolygon = function(polygon){
+			UndoService.addEvent(polygon,'delete');					
+			PolygonService.removePolygon();
+
+		};			
+
+		
+	});
+
+	</script>
+	<script src="undoservice.js"></script>
+	<script src="polygonservice.js"></script>
+	
+	
+
+
+
+</body>
+</html>
