@@ -44,9 +44,10 @@
 		$scope.undoSvc = UndoService;		
 		$scope.polySvc = PolygonService;
 
+
 		$scope.createPolygon = function(){
-			var obj = PolygonService.addPolygon();
-			UndoService.addEvent(obj,'create');			
+			var polygon = PolygonService.addPolygon();
+			UndoService.addEvent(polygon,'create');			
 		};			
 		$scope.updatePolygon = function(polygon, propertyName, ov){
 			UndoService.addEvent(polygon,'update',propertyName, ov);

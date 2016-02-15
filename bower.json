@@ -13,6 +13,7 @@
     "tests"
   ],
   "dependencies": {
-    "angular-history": "^0.8.1"
+    "angular-history": "^0.8.1",
+    "angular-hotkeys": "cfp-angular-hotkeys#^1.6.0"
   }
 }
